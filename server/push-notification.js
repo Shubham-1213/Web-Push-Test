@@ -11,10 +11,10 @@ const vapidKeys = webpush.generateVAPIDKeys();
 
 // Push subscription object (from the client-side, save it on your server)
 const pushSubscription = {
-  endpoint: 'USER_PUSH_ENDPOINT',
+  endpoint: 'https://fcm.googleapis.com/fcm/send/dIBOuDnzKBM:APA91bFDlnNylq3vtcbOf-tgfchEPk8b7XhD4ShSA-_dgwRrMHQzjqOGCIRMvPW2fErb7G2CUtQd001XEOBMo1KQXz8nBxIi0AsOq-_3iLimJZWqVI3TdnTTDwBKfAWvqnV14jWV0lC4',
   keys: {
-    p256dh: 'USER_PUBLIC_KEY',
-    auth: 'USER_AUTH_KEY'
+    auth: '"c0h2sVZP8wRqa1b+KLtqQQ=="',
+    p256dh: '"BAZdHHFonSESOnBNigDO9H+lzIh+YUFm7qoQViJXxpQwusmeml4pvvJcd+srJcxiRNNnYBpEP/sYfMq38to/Zro="'
   }
 };
 

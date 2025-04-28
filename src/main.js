@@ -1,6 +1,7 @@
 // Register the service worker
+console.log("Hi")
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+    navigator.serviceWorker.register('/public/sw.js').then(function(registration) {
       console.log('Service Worker Registered:', registration);
     }).catch(function(error) {
       console.error('Service Worker Registration Failed:', error);
@@ -18,24 +19,30 @@ if ('serviceWorker' in navigator) {
       }
     });
   }
-  
-  // Subscribe to push notifications
   function subscribeUserToPush() {
     if ('PushManager' in window) {
       navigator.serviceWorker.ready.then(function(registration) {
         registration.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY')
+          applicationServerKey: urlBase64ToUint8Array('BEVp7FYuxFba7JHyjBAXImcM_PW16YA9F_c2FOJkAtH5AZZiPc-vDtNqSBeb7-2Rdat2ozkL8HuB39fN6LMmwHc') // Replace with your VAPID public key
         }).then(function(subscription) {
           console.log('User is subscribed:', subscription);
-          // Send the subscription to your server
+  
+          // Convert keys from ArrayBuffer to Base64
+          const pushSubscription = {
+            endpoint: subscription.endpoint,
+            keys: {
+              p256dh: arrayBufferToBase64(subscription.getKey('p256dh')), // Convert to base64
+              auth: arrayBufferToBase64(subscription.getKey('auth'))      // Convert to base64
+            }
+          }
         }).catch(function(error) {
           console.error('Failed to subscribe:', error);
         });
       });
     }
   }
-  
+
   // Utility function to convert VAPID public key to UInt8Array
   function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -50,3 +57,11 @@ if ('serviceWorker' in navigator) {
     return outputArray;
   }
   
+  function arrayBufferToBase64(buffer) {
+    const byteArray = new Uint8Array(buffer);
+    let binary = '';
+    byteArray.forEach((byte) => {
+      binary += String.fromCharCode(byte);
+    });
+    return window.btoa(binary);
+  }
